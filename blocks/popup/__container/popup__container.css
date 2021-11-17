@@ -6,9 +6,8 @@
   position: fixed;
   font-family: 'Inter';
   min-height: 330px;
-  top: calc(100%/2 - 330px/2);
+  top: calc(720px/2 - 330px/2);
   left: calc(100%/2 - 430px/2);
-  display: none;
 }
 
 input[type=text] {

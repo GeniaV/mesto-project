@@ -7,11 +7,10 @@
   align-self: end;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 540px) {
   .profile__name {
     font-size: 27px;
-    line-height: 1.22;
-    text-align: center;
+    line-height: 1.222;
   }
 }
 

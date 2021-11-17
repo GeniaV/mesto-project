@@ -3,7 +3,7 @@
   margin: 0;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 1024px) {
   .profile__plus-icon {
     width: 16px;
   }

@@ -1,20 +1,20 @@
 .popup__profile-name {
   font-family: inherit;
   font-weight: 400;
-  line-height: 1.22;
+  line-height: 1.21;
   font-size: 14px;
   border: 0px;
   border-bottom: 1px solid #cccccc;
   width: 358px;
-  margin-left: 36px;
   box-sizing: border-box;
-  margin-top: 48px;
+  margin: 43px 0 0 36px;
+  padding-left: 0;
 }
 
 @media screen and (max-width: 525px) {
   .popup__profile-name {
     width: 238px;
-    margin: 75px auto 0 auto;
+    margin: 71px auto 0 auto;
     box-sizing: border-box;
   }
 }

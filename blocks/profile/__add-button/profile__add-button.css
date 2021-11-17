@@ -1,5 +1,5 @@
 .profile__add-button {
-  width: 150px;
+  width: 146px;
   height: 46px;
   border: 2px solid white;
   display: flex;
@@ -15,9 +15,9 @@
   transition-delay: 0.02s;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 1024px) {
   .profile__add-button {
-    width: 282px;
+    width: 278px;
   }
 }
 
