@@ -1,0 +1,3 @@
+.popup__item:focus {
+  outline-color: white;
+}

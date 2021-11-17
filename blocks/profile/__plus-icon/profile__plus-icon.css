@@ -1,0 +1,10 @@
+.profile__plus-icon {
+  width: 22px;
+  margin: 0;
+}
+
+@media screen and (max-width: 320px) {
+  .profile__plus-icon {
+    width: 16px;
+  }
+}

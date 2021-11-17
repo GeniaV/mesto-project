@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mesto</title>
+    <meta name="description" content="Mesto">
+    <link rel="stylesheet" href="./pages/index.css">
+  </head>
+  <body class="main-page">
+    <div class="popup popup_opened">
+      <form class="popup__container popup_opened">
+        <img src="./images/Close Icon.svg" alt="закрыть" class="popup__close-icon">
+        <h2 class="popup__heading">Редактировать профиль</h2>
+        <fieldset class="popup__profile-name">
+          <input class="popup__item" type="text" id="profile-name" name="profile-name" value="Жак-Ив Кусто" required>
+        </fieldset>
+        <fieldset class="popup__profile-profession">
+          <input class="popup__item" type="text" id="profile-profession" name="profile-profession" value="Исследователь океана" required>
+        </fieldset>
+        <fieldset class="popup__handlers">
+          <input class="popup__button" type="submit" value="Cохранить">
+        </fieldset>
+      </form>
+    </div>
+    <header class="header">
+      <img src="./images/logo-mesto-russia.svg" alt="Логотип Mesto" class="logo logo_place_header">
+      <hr class="header__line">
+    </header>
+    <section class="profile">
+      <div class="profile__main-info">
+        <img src="./images/Avatar.png" class="profile__avatar" alt="Аватар">
+        <div class="profile__info">
+          <h1 class="profile__name">Жак-Ив Кусто</h1>
+          <img src="./images/Edit Button.svg" class="profile__edit-button" alt="Редактировать профиль">
+          <h2 class="profile__profession">Исследователь океана</h2>
+        </div>
+      </div>
+      <div class="profile__add-button">
+        <img src="./images/Add Button.svg" class="profile__plus-icon">
+      </div>
+    </section>
+    <section class="places-gallery">
+     <div class="place-gallery__card">
+       <img class="places-gallery__photo" src="./images/karachayevsk.jpg" alt="Карачаевск">
+       <div class="places-gallery__description">
+        <h2 class="places-gallery__name">Карачаевск</h2>
+        <img class="place-gallery__like-icon" src="./images/like-icon.svg" alt="Нравится">
+       </div>
+     </div>
+     <div class="place-gallery__card">
+      <img class="places-gallery__photo" src="./images/elbrus.png" alt="Гора Эльбрус">
+      <div class="places-gallery__description">
+       <h2 class="places-gallery__name">Гора Эльбрус</h2>
+       <img class="place-gallery__like-icon" src="./images/like-icon.svg" alt="Нравится">
+      </div>
+    </div>
+    <div class="place-gallery__card">
+      <img class="places-gallery__photo" src="./images/dombay.png" alt="Домбай">
+      <div class="places-gallery__description">
+       <h2 class="places-gallery__name">Домбай</h2>
+       <img class="place-gallery__like-icon" src="./images/like-icon.svg" alt="Нравится">
+      </div>
+    </div>
+    <div class="place-gallery__card">
+      <img class="places-gallery__photo" src="./images/khibiny.png" alt="Хибины">
+      <div class="places-gallery__description">
+       <h2 class="places-gallery__name">Хибины</h2>
+       <img class="place-gallery__like-icon" src="./images/like-icon.svg" alt="Нравится">
+      </div>
+    </div>
+    <div class="place-gallery__card">
+      <img class="places-gallery__photo" src="./images/baykal.png" alt="Байкал">
+      <div class="places-gallery__description">
+       <h2 class="places-gallery__name">Байкал</h2>
+       <img class="place-gallery__like-icon" src="./images/like-icon.svg" alt="Нравится">
+      </div>
+    </div>
+    <div class="place-gallery__card">
+      <img class="places-gallery__photo" src="./images/karachayevo-cherkessiya.png" alt="Карачаево-Черкессия">
+      <div class="places-gallery__description">
+       <h2 class="places-gallery__name">Карачаево-Черкессия</h2>
+       <img class="place-gallery__like-icon" src="./images/like-icon.svg" alt="Нравится">
+      </div>
+    </div>
+    </section>
+    <footer class="footer">
+      <p class="footer__copyright">&copy;&nbsp;2020&nbsp;Mesto&nbsp;Russia</p>
+    </footer>
+  </body>
+</html>

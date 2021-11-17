@@ -1,0 +1,16 @@
+.place-gallery__like-icon {
+  width: 22px;
+  margin: 0 20px 0 0;
+}
+
+.place-gallery__like-icon:hover {
+  cursor: pointer;
+  opacity: 50%;
+  transition-duration: 0.5s;
+  transition-delay: 0.02s;
+}
+
+.place-gallery__like-icon:active {
+  cursor: pointer;
+  color: black;
+}
