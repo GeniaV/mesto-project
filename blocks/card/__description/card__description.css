@@ -1,4 +1,4 @@
-.places-gallery__description {
+.card__description {
   display: flex;
   justify-content: space-between;
 }

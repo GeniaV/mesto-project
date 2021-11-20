@@ -7,9 +7,7 @@
   margin: 0px;
   border: 0;
   cursor: pointer;
-}
-
-.popup__button[type="submit"] {
+  padding-top: 15px;
   background-color: #000;
   border-radius: 2px;
   outline: none;
@@ -29,8 +27,6 @@
 @media screen and (max-width: 525px) {
   .popup__button {
     font-size: 14px;
-  }
-  .popup__button[type="submit"] {
     width: 238px;
     height: 46px;
     margin: 45px auto 0 auto;

@@ -3,6 +3,7 @@
   margin: 45px 200px 40px 200px;
   justify-content: space-between;
   flex-direction: column;
+  border-bottom: 1px solid #545454;
 }
 
 @media screen and (max-width: 768px) {
