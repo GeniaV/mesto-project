@@ -9,11 +9,17 @@
 
 @media screen and (max-width: 1024px) {
   .profile__info {
-    row-gap: 5px;
+    margin: 0;
     column-gap: 10px;
     margin-top: 26px;
     margin-bottom: 36px;
+    justify-content: center;
+  }
+}
 
+@media screen and (max-width: 320px) {
+  .profile__info {
+    row-gap: 5px;
     margin-left: 15%;
     max-width: 282px;
   }

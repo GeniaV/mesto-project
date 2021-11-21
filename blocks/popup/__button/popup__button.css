@@ -4,7 +4,7 @@
   line-height: 1.22;
   font-size: 18px;
   color: #ffffff;
-  margin: 0px;
+  margin: 0 0 37px 0;
   border: 0;
   cursor: pointer;
   padding-top: 15px;
@@ -29,6 +29,6 @@
     font-size: 14px;
     width: 238px;
     height: 46px;
-    margin: 45px auto 0 auto;
+    margin: 45px auto 25px auto;
   }
 }

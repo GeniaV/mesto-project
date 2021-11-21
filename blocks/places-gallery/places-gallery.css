@@ -5,14 +5,16 @@
   row-gap: 20px;
   column-gap: 17px;
   grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+  justify-items: center;
 }
 
 @media screen and (max-width: 320px) {
   .places-gallery {
     grid-template-columns: 1fr;
-    justify-items: center;
     max-width: 282px;
     column-gap: 0px;
-    margin: 36px auto 0 auto;
+    margin-top: 36px;
+    margin-left: 19px;
+    margin-right: 19px;
   }
 }

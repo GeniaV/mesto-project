@@ -5,17 +5,17 @@
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
   display: flex;
   font-family: 'Inter', Arial, sans-serif;;
-
   max-width: 430px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-bottom: 0;
-  margin-top: calc(720px/2 - 330px/2);
+  margin: 0 auto 0 auto;
+  position: relative;
+  right: auto;
+  top: 195px;
 }
 
 @media screen and (max-width: 525px) {
   .popup__container {
     max-width: 282px;
-    margin-top: calc(568px/2 - 322px/2);
+    top: 123px;
   }
 }
+
