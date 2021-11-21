@@ -8,8 +8,8 @@
   max-width: 430px;
   margin: 0 auto 0 auto;
   position: relative;
-  right: auto;
-  top: 195px;
+  top: 29%;
+  right: 0;
 }
 
 @media screen and (max-width: 525px) {
