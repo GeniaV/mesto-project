@@ -8,14 +8,12 @@
   max-width: 430px;
   margin: 0 auto 0 auto;
   position: relative;
-  top: 29%;
-  right: 0;
+  align-self: center;
 }
 
 @media screen and (max-width: 525px) {
   .popup__container {
     max-width: 282px;
-    top: 123px;
   }
 }
 

@@ -3,7 +3,7 @@
   margin: 45px 200px 40px 200px;
   justify-content: space-between;
   flex-direction: column;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.23);
+  border-bottom: 1px solid rgba(84, 84, 84, .70)
 }
 
 @media screen and (max-width: 768px) {
