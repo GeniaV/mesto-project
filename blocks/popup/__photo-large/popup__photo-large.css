@@ -1,0 +1,7 @@
+.popup__photo-large {
+  object-fit: contain;
+  max-width: 75vw;
+  max-height: 75vh;
+  width: auto;
+  height: auto;
+}
