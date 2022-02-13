@@ -141,3 +141,125 @@ function addCard (evt) {
 
 formElementCard.addEventListener('submit', addCard);
 
+//Закрытие попапа при клике на overlay
+
+const popups = document.querySelectorAll('.popup');
+
+function closePopupByClickOnOverlay(popup) {
+  popup.addEventListener('click', (event) => {
+    if(event.target === popup) {
+      closePopup(popup);
+    }
+  });
+}
+
+popups.forEach(popup => {
+  closePopupByClickOnOverlay(popup);
+});
+
+//Закрытие попапа при нажатии Esc
+document.addEventListener('keydown', closePopupByPressEsc);
+
+function closePopupByPressEsc(key) {
+  if(key.key === 'Escape') {
+    popups.forEach(popup => {
+      closePopup(popup);
+    });
+  }
+}
+
+// Попап Обновить аватар
+const popupUpdateAvatar = document.querySelector('.popup_type_update-avatar');
+const closeButtonUpdateAvatar = document.querySelector('.popup__close-button_type_update-avatar');
+const formElementAvatar = document.querySelector('.popup__form_type_update-avatar');
+const popupAvatarLinkInput = formElementAvatar.querySelector('#place-avatarlink');
+const avatar = document.querySelector('.profile__avatar');
+const avatarUpdateContainer = document.querySelector('.profile__avatar-container');
+
+closeButtonUpdateAvatar.addEventListener('click', () => closePopup(popupUpdateAvatar));
+
+avatarUpdateContainer.addEventListener('click', function() {
+  openPopup(popupUpdateAvatar);
+});
+
+function updateAvatar(evt) {
+  evt.preventDefault();
+  avatar.src = popupAvatarLinkInput.value;
+  closePopup(popupUpdateAvatar);
+}
+
+formElementAvatar.addEventListener('submit', updateAvatar);
+
+//Валидация форм Редактировать профиль и Новое место
+// Функция, которая добавляет класс с ошибкой
+
+const showInputError = (formElement, inputElement, errorMessage) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-input-error`);
+  inputElement.classList.add('popup__input-style_type_error');
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add('popup__input-error_active');
+};
+
+// Функция, которая удаляет класс с ошибкой
+const hideInputError = (formElement, inputElement) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-input-error`);
+  inputElement.classList.remove('popup__input-style_type_error');
+  errorElement.classList.remove('popup__input-error_active');
+  errorElement.textContent = '';
+};
+
+// Функция, которая проверяет валидность поля
+const isValid = (formElement, inputElement) => {
+  if (!inputElement.validity.valid) {
+    showInputError(formElement, inputElement, inputElement.validationMessage);
+  } else {
+    hideInputError(formElement, inputElement);
+  }
+};
+
+// Поиск невалидного инпута
+const hasInvalidInput = (inputList) => {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  })
+};
+
+// Изменение состояния кнопки sumbit при изменения валидности поля
+const toggleButtonState = (inputList, buttonElement) => {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.setAttribute('disabled', true);
+  } else {
+    buttonElement.removeAttribute('disabled');
+  }
+};
+
+const setEventListeners = (formElement) => {
+  const inputList = Array.from(formElement.querySelectorAll('.popup__input-style'));
+  const buttonElement = formElement.querySelector('.popup__button');
+  toggleButtonState(inputList, buttonElement);
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', () => {
+      isValid(formElement, inputElement);
+      toggleButtonState(inputList, buttonElement);
+    });
+  });
+};
+
+const enableValidation = () => {
+  const formList = Array.from(document.querySelectorAll('.popup__form'));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+    });
+    setEventListeners(formElement);
+  });
+};
+
+enableValidation();
+
+
+
+
+
+
+

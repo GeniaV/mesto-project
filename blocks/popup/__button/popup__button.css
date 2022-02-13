@@ -18,6 +18,26 @@
   margin-left: 36px;
 }
 
+.popup__button:disabled {
+  opacity: 0.2;
+  outline-offset: -1px;
+  outline: 1px solid #000000;
+  color: #000000;
+  background-color: transparent;
+  transition-duration: 0.5s;
+  transition-delay: 0.02s;
+}
+
+.popup__button:disabled:hover {
+  opacity: 0.2;
+  outline-offset: -1px;
+  outline: 1px solid #000000;
+  color: #000000;
+  background-color: transparent;
+  transition-duration: 0.5s;
+  transition-delay: 0.02s;
+}
+
 .popup__button:hover {
   opacity: 80%;
   transition-duration: 0.5s;
