@@ -27,13 +27,7 @@ placesGallery.prepend(...newCard);
 
 formElementCard.addEventListener('submit', addCard);
 
-//Закрытие попапа при клике на overlay
-popups.forEach(popup => {
-  closePopupByClickOnOverlay(popup);
-});
-
-// //Закрытие попапа при нажатии Esc
-document.addEventListener('keydown', closePopupByPressEsc);
+document.addEventListener('click', closePopupByClickOnOverlay);
 
 // Попап Обновить аватар
 closeButtonUpdateAvatar.addEventListener('click', () => closePopup(popupUpdateAvatar));
@@ -52,7 +46,6 @@ enableValidation({
   inputErrorClass: 'popup__input-style_type_error',
   errorClass: 'popup__input-error_active'
 });
-
 
 //Импорты
 import { openPopup } from './utils.js';
@@ -82,7 +75,6 @@ import { popupAvatarLinkInput } from './modal.js';
 import { avatar } from './modal.js';
 import { updateAvatar } from './modal.js';
 import { closePopupByClickOnOverlay } from './modal.js';
-import { popups } from './modal.js';
 import { closePopupByPressEsc } from './modal.js';
 import { showPhoto } from './modal.js';
 import { popupPhoto } from './card.js';

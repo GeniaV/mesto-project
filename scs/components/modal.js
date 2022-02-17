@@ -32,24 +32,6 @@ export function updateAvatar(evt) {
   closePopup(popupUpdateAvatar);
 }
 
-export function closePopupByClickOnOverlay(popup) {
-  popup.addEventListener('click', (event) => {
-    if(event.target === popup) {
-      closePopup(popup);
-    }
-  });
-}
-
-export const popups = document.querySelectorAll('.popup');
-
-export function closePopupByPressEsc(key) {
-  if(key.key === 'Escape') {
-    popups.forEach(popup => {
-      closePopup(popup);
-    });
-  }
-}
-
 export function showPhoto () {
   openPopup(popupImage);
   popupPhoto.src = cardImage.src;
@@ -57,4 +39,16 @@ export function showPhoto () {
   popupPhotoCaption.textContent = cardName.textContent;
 }
 
+export function closePopupByClickOnOverlay(evt) {
+  const activePopup = document.querySelector('.popup_opened');
+  if(evt.target === activePopup) {
+    closePopup(activePopup );
+  }
+}
 
+export function closePopupByPressEsc(evt) {
+  const activePopup = document.querySelector('.popup_opened');
+  if(evt.key === 'Escape') {
+    closePopup(activePopup);
+  }
+}
