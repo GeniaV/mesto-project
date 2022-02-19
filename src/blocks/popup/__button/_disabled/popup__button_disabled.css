@@ -1,0 +1,19 @@
+.popup__button_disabled {
+  opacity: 0.2;
+  outline-offset: -1px;
+  outline: 1px solid #000000;
+  color: #000000;
+  background-color: transparent;
+  transition-duration: 0.5s;
+  transition-delay: 0.02s;
+}
+
+.popup__button_disabled:hover {
+  opacity: 0.2;
+  outline-offset: -1px;
+  outline: 1px solid #000000;
+  color: #000000;
+  background-color: transparent;
+  transition-duration: 0.5s;
+  transition-delay: 0.02s;
+}
