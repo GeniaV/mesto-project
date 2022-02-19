@@ -48,6 +48,7 @@ enableValidation({
 });
 
 //Импорты
+import './pages/index.css';
 import { openPopup } from './utils.js';
 import { closePopup } from './utils.js';
 import { showInputError } from './validate.js';
