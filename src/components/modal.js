@@ -9,11 +9,6 @@ export const jobInput = formElement.querySelector('#profile-profession');
 export const popupProfile = document.querySelector('.popup_type_profile');
 export const popupImage = document.querySelector('.popup_type_image');
 
-export const closeButton = document.querySelector('.popup__close-button_type_profile');
-export const closeButtonPopupNewCards = document.querySelector('.popup__close-button_type_new-card');
-export const closeButtonImage = document.querySelector('.popup__close-button_type__image');
-export const closeButtonUpdateAvatar = document.querySelector('.popup__close-button_type_update-avatar');
-
 export function editProfile(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
@@ -39,16 +34,20 @@ export function showPhoto () {
   popupPhotoCaption.textContent = cardName.textContent;
 }
 
-export function closePopupByClickOnOverlay(evt) {
-  const activePopup = document.querySelector('.popup_opened');
-  if(evt.target === activePopup) {
-    closePopup(activePopup );
+export function closePopupByPressEsc(evt) {
+  if(evt.key === 'Escape') {
+    const activePopup = document.querySelector('.popup_opened');
+    closePopup(activePopup);
   }
 }
 
-export function closePopupByPressEsc(evt) {
-  const activePopup = document.querySelector('.popup_opened');
-  if(evt.key === 'Escape') {
-    closePopup(activePopup);
-  }
+export function cleanErrors(popupElement) {
+  const input = popupElement.querySelectorAll('.popup__input-style');
+  const errorText = popupElement.querySelectorAll('.popup__input-error');
+  input.forEach(input => {
+    input.classList.remove('popup__input-style_type_error');
+  });
+  errorText.forEach(errorText => {
+    errorText.classList.remove('popup__input-error_active');
+  });
 }
