@@ -34,8 +34,6 @@ popups.forEach((popup) => {
 
 formElement.addEventListener('submit', editProfile);
 
-placesGallery.prepend(...newCard);
-
 formElementCard.addEventListener('submit', addCard);
 
 avatarUpdateContainer.addEventListener('click', function() {
@@ -87,7 +85,6 @@ import { popupPhotoCaption } from './card.js';
 import { initialCards } from './card.js';
 import { deleteCard } from './card.js';
 import { createCard } from './card.js';
-import { newCard } from './card.js';
 import { formElementCard } from './card.js';
 import { placesGallery } from './card.js';
 import { placeInput } from './card.js';
@@ -95,4 +92,24 @@ import { linkInput } from './card.js';
 import { popupNewCards } from './card.js';
 import { addCard } from './card.js';
 import { cleanErrors } from './modal.js';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

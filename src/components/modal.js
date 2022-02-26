@@ -1,5 +1,8 @@
 import { openPopup } from './utils.js';
 import { closePopup } from './utils.js';
+import { getProfileInfoFromServer } from './api.js';
+import { updateProfile} from './api.js';
+import { updateProfilePhoto} from './api.js'
 
 export const formElement = document.querySelector('.popup__form');
 export const profileName = document.querySelector('.profile__name');
@@ -11,8 +14,17 @@ export const popupImage = document.querySelector('.popup_type_image');
 
 export function editProfile(evt) {
   evt.preventDefault();
-  profileName.textContent = nameInput.value;
-  profileProfession.textContent = jobInput.value;
+  updateProfile({
+    name: nameInput.value,
+    about: jobInput.value
+  })
+  .then(res => {
+    profileName.textContent = nameInput.value;
+    profileProfession.textContent = jobInput.value;
+  })
+  .catch(err => {
+    console.log('Ошибка редактирования профиля', err.message);
+  })
   closePopup(popupProfile);
 }
 
@@ -23,7 +35,17 @@ export const avatar = document.querySelector('.profile__avatar');
 
 export function updateAvatar(evt) {
   evt.preventDefault();
-  avatar.src = popupAvatarLinkInput.value;
+  updateProfilePhoto({
+    avatar: popupAvatarLinkInput.value
+  })
+  .then(res => {
+    avatar.src = popupAvatarLinkInput.value;
+  })
+  .catch(err => {
+    console.log('Ошибка редактирования фото профиля', err.message);
+  })
+
+
   closePopup(popupUpdateAvatar);
 }
 
@@ -51,3 +73,17 @@ export function cleanErrors(popupElement) {
     errorText.classList.remove('popup__input-error_active');
   });
 }
+
+//Получение аватара с сервера
+getProfileInfoFromServer()
+  .then(data => {
+    avatar.src = data.avatar;
+    profileName.textContent = data.name;
+    profileProfession.textContent = data.about;
+  })
+  .catch(err => {
+    console.log('Ошибка при загрузке аватара', err.message);
+  })
+
+
+

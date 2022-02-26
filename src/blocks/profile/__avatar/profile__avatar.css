@@ -4,6 +4,7 @@
   cursor: pointer;
   border-radius: 100px;
   transition-duration: 0.7s;
+  object-fit: cover;
 }
 
 .profile__avatar:hover {
