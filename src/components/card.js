@@ -1,5 +1,9 @@
 import { openPopup } from './utils.js';
 import { closePopup } from './utils.js';
+import { addNewCards } from './api.js';
+import { addLike } from './api.js';
+import { deleteLike } from './api.js';
+import { getProfileInfoFromServer } from './api.js';
 
 export const popupPhoto = document.querySelector('.popup__photo-large');
 export const cardTemplate = document.querySelector('#card-template').content; // Обратились к содержимому
@@ -10,7 +14,7 @@ export function deleteCard(evt) {
   evt.target.closest('.card').remove();
 }
 
-export function createCard(name, link, likes) {
+export function createCard(res) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const deleteButton = cardElement.querySelector('.card__delete-icon'); // Объявили кнопку удаления (иконка корзина)
   const likeButton = cardElement.querySelector('.card__like-icon'); // Объявили кнопку лайк
@@ -18,20 +22,43 @@ export function createCard(name, link, likes) {
   const cardImage = cardElement.querySelector('.card__image'); // Объявили фото картоки
   const likeCounter = cardElement.querySelector('.card__likes-counter');
 
-  cardName.textContent = name;
-  cardImage.alt = name;
-  cardImage.src = link;
-  likeCounter.textContent = likes.length;
+  cardName.textContent = res.name;
+  cardImage.alt = res.name;
+  cardImage.src = res.link;
+  likeCounter.textContent = res.likes.length;
+
+  getProfileInfoFromServer()
+  .then(data => {
+    const userId = data._id;
+    res.likes.forEach((item) => {
+      if(item._id === userId) {
+        likeButton.classList.add('card__like-icon_like');
+        likeCounter.textContent + 1;
+      }
+    })
+  })
 
   function likeCard() {
-    let length = likeCounter.textContent.length;
-     if(!(likeButton.classList.contains('card__like-icon_like'))) {
-      likeButton.classList.add('card__like-icon_like');
-      likeCounter.textContent = length;
-    } else {
-      likeButton.classList.remove('card__like-icon_like');
-      likeCounter.textContent = length - 1;
-    }
+    let length = Number(likeCounter.textContent);
+    if(!(likeButton.classList.contains('card__like-icon_like'))) {
+      addLike (res._id)
+      .then(res => {
+        likeButton.classList.add('card__like-icon_like');
+        likeCounter.textContent = length + 1;
+      })
+      .catch(err => {
+        console.log('Ошибка проствления лайка', err.message);
+      })
+     } else {
+      deleteLike (res._id)
+      .then(res => {
+        likeButton.classList.remove('card__like-icon_like');
+        likeCounter.textContent = length - 1;
+      })
+      .catch(err => {
+        console.log('Ошибка удаления лайка', err.message);
+      })
+     }
   }
 
   // Функция показа фотографии карточки в попапе
@@ -58,14 +85,16 @@ export const popupNewCards = document.querySelector('.popup_type_new-card');
 // Добавление карточек пользователем
 export function addCard (evt) {
   evt.preventDefault();
-
+  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
+  const likeCounter = cardElement.querySelector('.card__likes-counter');
   addNewCards({
     name: placeInput.value,
     link: linkInput.value,
     likes: likeCounter.textContent
   })
   .then(res => {
-    placesGallery.prepend(createCard(placeInput.value, linkInput.value, likeCounter.textContent));
+    console.log(res)
+    placesGallery.prepend(createCard(res));
   })
   .catch(err => {
     console.log('Ошибка добавления карточки на сервер', err.message);
@@ -82,7 +111,7 @@ import { getInitialCards } from './api.js';
 getInitialCards()
 .then(data => {
   const newCard = data.map((item) => {
-    return createCard(item.name, item.link, item.likes);
+    return createCard(item);
   })
   placesGallery.prepend(...newCard);
 })

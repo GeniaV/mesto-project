@@ -44,7 +44,7 @@ export const addNewCards = ({name, link}) => {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({name, link})
-})
+  })
   .then(res => parsResponse(res))
   .catch((err) => {
     console.log(err);
@@ -53,11 +53,11 @@ export const addNewCards = ({name, link}) => {
 }
 
 //Редактирование профиля
-export const updateProfile = ({name, about, likes}) => {
+export const updateProfile = ({name, about}) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: config.headers,
-    body: JSON.stringify({name, about, likes})
+    body: JSON.stringify({name, about})
 })
   .then(res => parsResponse(res))
   .catch((err) => {
@@ -80,6 +80,30 @@ export const updateProfilePhoto = ({avatar}) => {
   });
 }
 
+//Простановка  лайка
+export const addLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: config.headers
+})
+  .then(res => parsResponse(res))
+  .catch((err) => {
+    console.log(err);
+    return Promise.reject(err);
+  });
+}
 
+//Удаление лайка
+export const deleteLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+})
+  .then(res => parsResponse(res))
+  .catch((err) => {
+    console.log(err);
+    return Promise.reject(err);
+  });
+}
 
 

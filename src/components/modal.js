@@ -45,7 +45,6 @@ export function updateAvatar(evt) {
     console.log('Ошибка редактирования фото профиля', err.message);
   })
 
-
   closePopup(popupUpdateAvatar);
 }
 
