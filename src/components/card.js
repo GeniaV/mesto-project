@@ -99,6 +99,8 @@ export const popupNewCards = document.querySelector('.popup_type_new-card');
 
 // Добавление карточек пользователем
 export function addCard (evt) {
+  const buttonElement = popupNewCards.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
   evt.preventDefault();
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const likeCounter = cardElement.querySelector('.card__likes-counter');
@@ -114,9 +116,11 @@ export function addCard (evt) {
   .catch(err => {
     console.log('Ошибка добавления карточки на сервер', err.message);
   })
-
+  .finally(() => {
+    buttonElement.textContent = 'Создать';
+  })
   closePopup(popupNewCards);
-  const buttonElement = popupNewCards.querySelector('.popup__button');
+
   buttonElement.classList.add('popup__button_disabled');
   buttonElement.disabled = true;
 }
