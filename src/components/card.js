@@ -4,6 +4,7 @@ import { addNewCards } from './api.js';
 import { addLike } from './api.js';
 import { deleteLike } from './api.js';
 import { getProfileInfoFromServer } from './api.js';
+import { deleteСardfromServer } from './api.js';
 
 export const popupPhoto = document.querySelector('.popup__photo-large');
 export const cardTemplate = document.querySelector('#card-template').content; // Обратились к содержимому
@@ -36,6 +37,12 @@ export function createCard(res) {
         likeCounter.textContent + 1;
       }
     })
+    if(res.owner._id !== userId) {
+      deleteButton.style.display = 'none';
+    }
+  })
+  .catch(err => {
+    console.log('Ошибка', err.message);
   })
 
   function likeCard() {
@@ -71,7 +78,15 @@ export function createCard(res) {
 
   cardImage.addEventListener('click', showPhoto);
   likeButton.addEventListener('click', likeCard);
-  deleteButton.addEventListener('click', deleteCard);
+  deleteButton.addEventListener('click', (evt) => {
+    deleteСardfromServer(res._id)
+    .then((res) => {
+      deleteCard(evt);
+    })
+    .catch(err => {
+      console.log('Ошибка удаления карточки', err.message);
+    })
+  });
 
   return cardElement;
 }
@@ -118,3 +133,5 @@ getInitialCards()
 .catch(err => {
   console.log('Ошибка при загрузке карточек', err.message);
 })
+
+

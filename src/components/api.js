@@ -106,4 +106,17 @@ export const deleteLike = (cardId) => {
   });
 }
 
+//Удаление карточки
+export const deleteСardfromServer = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+})
+  .then(res => parsResponse(res))
+  .catch((err) => {
+    console.log(err);
+    return Promise.reject(err);
+  });
+}
+
 

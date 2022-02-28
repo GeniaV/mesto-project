@@ -4,7 +4,7 @@ const avatarUpdateContainer = document.querySelector('.profile__avatar-container
 
 editButton.addEventListener('click', function() {
   openPopup(popupProfile);
-  cleanErrors(popupProfile)
+  cleanErrors(popupProfile);
   nameInput.value = profileName.textContent;
   jobInput.value = profileProfession.textContent;
   const buttonElement = popupProfile.querySelector('.popup__button');
@@ -39,7 +39,10 @@ formElementCard.addEventListener('submit', addCard);
 avatarUpdateContainer.addEventListener('click', function() {
   openPopup(popupUpdateAvatar);
   popupAvatarLinkInput.value = '';
-  cleanErrors(popupUpdateAvatar)
+  cleanErrors(popupUpdateAvatar);
+  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
+  buttonElement.classList.add('popup__button_disabled');
+  buttonElement.disabled = true;
 });
 
 formElementAvatar.addEventListener('submit', updateAvatar);
@@ -92,24 +95,3 @@ import { linkInput } from './card.js';
 import { popupNewCards } from './card.js';
 import { addCard } from './card.js';
 import { cleanErrors } from './modal.js';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,3 +1,12 @@
+export const spinner = document.querySelector('.popup__spinner');
+export function renderLoading(isLoading) {
+  if(isLoading) {
+    spinner.classList.add('popup__spinner_visible')
+  } else {
+    spinner.classList.remove('popup__spinner_visible')
+  }
+}
+
 import { openPopup } from './utils.js';
 import { closePopup } from './utils.js';
 import { getProfileInfoFromServer } from './api.js';
@@ -14,6 +23,7 @@ export const popupImage = document.querySelector('.popup_type_image');
 
 export function editProfile(evt) {
   evt.preventDefault();
+  renderLoading(true);
   updateProfile({
     name: nameInput.value,
     about: jobInput.value
@@ -25,6 +35,9 @@ export function editProfile(evt) {
   .catch(err => {
     console.log('Ошибка редактирования профиля', err.message);
   })
+  .finally(() => {
+    renderLoading(false);
+  })
   closePopup(popupProfile);
 }
 
@@ -35,6 +48,7 @@ export const avatar = document.querySelector('.profile__avatar');
 
 export function updateAvatar(evt) {
   evt.preventDefault();
+  renderLoading(true);
   updateProfilePhoto({
     avatar: popupAvatarLinkInput.value
   })
@@ -44,7 +58,9 @@ export function updateAvatar(evt) {
   .catch(err => {
     console.log('Ошибка редактирования фото профиля', err.message);
   })
-
+  .finally(() => {
+    renderLoading(false);
+  })
   closePopup(popupUpdateAvatar);
 }
 
