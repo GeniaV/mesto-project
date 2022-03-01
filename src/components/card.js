@@ -110,7 +110,6 @@ export function addCard (evt) {
     likes: likeCounter.textContent
   })
   .then(res => {
-    console.log(res)
     placesGallery.prepend(createCard(res));
   })
   .catch(err => {

@@ -119,4 +119,14 @@ export const deleteСardfromServer = (cardId) => {
   });
 }
 
-
+Promise.all([
+  getProfileInfoFromServer(),
+  getInitialCards
+])
+.then((res) => {
+  res
+})
+.catch((err) => {
+  console.log(err);
+  return Promise.reject(err);
+});
