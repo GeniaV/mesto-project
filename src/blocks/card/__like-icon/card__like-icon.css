@@ -1,7 +1,7 @@
 .card__like-icon {
   width: 22px;
   height: 19px;
-  margin: 0 20px 0px 0;
+  margin: 0 0 0px 0;
   align-self: center;
   background-image: url(../../../images/like-icon.svg);
   background-repeat: no-repeat;
