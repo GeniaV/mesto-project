@@ -1,5 +1,5 @@
 import { openPopup, closePopup } from './utils.js';
-import { addNewCards, addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer, getInitialCards } from './api.js';
+import { addNewCards, addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
 import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage, placesGallery, placeInput,
   linkInput, popupNewCards } from './constants.js';
 
@@ -96,6 +96,7 @@ export function addCard (evt) {
   })
   .then(res => {
     placesGallery.prepend(createCard(res));
+    closePopup(popupNewCards);
   })
   .catch(err => {
     console.log('Ошибка добавления карточки на сервер', err.message);
@@ -103,22 +104,9 @@ export function addCard (evt) {
   .finally(() => {
     buttonElement.textContent = 'Создать';
   })
-  closePopup(popupNewCards);
 
   buttonElement.classList.add('popup__button_disabled');
   buttonElement.disabled = true;
 }
-
-// Получение карточек с сервера
-getInitialCards()
-.then(data => {
-  const newCard = data.map((item) => {
-    return createCard(item);
-  })
-  placesGallery.prepend(...newCard);
-})
-.catch(err => {
-  console.log('Ошибка при загрузке карточек', err.message);
-})
 
 

@@ -1,7 +1,7 @@
 import { openPopup, closePopup } from './utils.js';
-import { getProfileInfoFromServer, updateProfile, updateProfilePhoto } from './api.js';
+import { updateProfile, updateProfilePhoto } from './api.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupImage,
-  popupUpdateAvatar, popupAvatarLinkInput, avatar, popupPhoto } from './constants.js';
+         popupUpdateAvatar, popupAvatarLinkInput, avatar, popupPhoto } from './constants.js';
 
 export function editProfile(evt) {
   evt.preventDefault();
@@ -14,6 +14,7 @@ export function editProfile(evt) {
   .then(res => {
     profileName.textContent = nameInput.value;
     profileProfession.textContent = jobInput.value;
+    closePopup(popupProfile);
   })
   .catch(err => {
     console.log('Ошибка редактирования профиля', err.message);
@@ -21,7 +22,6 @@ export function editProfile(evt) {
   .finally(() => {
     buttonElement.textContent = 'Сохранить';
   })
-  closePopup(popupProfile);
 }
 
 export function updateAvatar(evt) {
@@ -33,6 +33,7 @@ export function updateAvatar(evt) {
   })
   .then(res => {
     avatar.src = popupAvatarLinkInput.value;
+    closePopup(popupUpdateAvatar);
   })
   .catch(err => {
     console.log('Ошибка редактирования фото профиля', err.message);
@@ -40,7 +41,6 @@ export function updateAvatar(evt) {
   .finally(() => {
     buttonElement.textContent = 'Сохранить';
   })
-  closePopup(popupUpdateAvatar);
 }
 
 export function showPhoto () {
@@ -67,17 +67,6 @@ export function cleanErrors(popupElement) {
     errorText.classList.remove('popup__input-error_active');
   });
 }
-
-//Получение аватара с сервера
-getProfileInfoFromServer()
-  .then(data => {
-    avatar.src = data.avatar;
-    profileName.textContent = data.name;
-    profileProfession.textContent = data.about;
-  })
-  .catch(err => {
-    console.log('Ошибка при загрузке аватара', err.message);
-  })
 
 
 

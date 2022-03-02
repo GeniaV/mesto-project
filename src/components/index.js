@@ -4,8 +4,10 @@ import { openPopup, closePopup } from './utils.js';
 import { enableValidation } from './validate.js';
 import { editProfile, updateAvatar, cleanErrors } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
-  formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards } from './constants.js';
-import { addCard } from './card.js';
+         formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
+         avatar, placesGallery } from './constants.js';
+import { addCard, createCard } from './card.js';
+import { getProfileInfoFromServer, getInitialCards } from './api.js';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
@@ -64,5 +66,29 @@ enableValidation({
   inputErrorClass: 'popup__input-style_type_error',
   errorClass: 'popup__input-error_active'
 });
+
+//Получение аватара с сервера
+getProfileInfoFromServer()
+  .then(data => {
+    avatar.src = data.avatar;
+    profileName.textContent = data.name;
+    profileProfession.textContent = data.about;
+  })
+  .catch(err => {
+    console.log('Ошибка при загрузке аватара', err.message);
+  })
+
+// Получение карточек с сервера
+getInitialCards()
+.then(data => {
+  const newCard = data.map((item) => {
+    return createCard(item);
+  })
+  placesGallery.prepend(...newCard);
+})
+.catch(err => {
+  console.log('Ошибка при загрузке карточек', err.message);
+})
+
 
 
