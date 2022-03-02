@@ -1,15 +1,7 @@
-import { openPopup } from './utils.js';
-import { closePopup } from './utils.js';
-import { addNewCards } from './api.js';
-import { addLike } from './api.js';
-import { deleteLike } from './api.js';
-import { getProfileInfoFromServer } from './api.js';
-import { deleteСardfromServer } from './api.js';
-
-export const popupPhoto = document.querySelector('.popup__photo-large');
-export const cardTemplate = document.querySelector('#card-template').content; // Обратились к содержимому
-export const popupPhotoCaption = document.querySelector('.popup__photo-caption');
-const popupImage = document.querySelector('.popup_type_image');
+import { openPopup, closePopup } from './utils.js';
+import { addNewCards, addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer, getInitialCards } from './api.js';
+import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage, placesGallery, placeInput,
+  linkInput, popupNewCards } from './constants.js';
 
 export function deleteCard(evt) {
   evt.target.closest('.card').remove();
@@ -68,7 +60,6 @@ export function createCard(res) {
      }
   }
 
-  // Функция показа фотографии карточки в попапе
   function showPhoto () {
     openPopup(popupImage);
     popupPhoto.src = cardImage.src;
@@ -90,12 +81,6 @@ export function createCard(res) {
 
   return cardElement;
 }
-
-export const formElementCard = document.querySelector('.popup__form_type_new-card');
-export const placesGallery = document.querySelector('.places-gallery');
-export const placeInput = formElementCard.querySelector('#place-name')
-export const linkInput = formElementCard.querySelector('#place-link');
-export const popupNewCards = document.querySelector('.popup_type_new-card');
 
 // Добавление карточек пользователем
 export function addCard (evt) {
@@ -125,7 +110,6 @@ export function addCard (evt) {
 }
 
 // Получение карточек с сервера
-import { getInitialCards } from './api.js';
 getInitialCards()
 .then(data => {
   const newCard = data.map((item) => {
