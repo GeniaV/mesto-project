@@ -1,7 +1,7 @@
 //Импорты
 import '../pages/index.css';
 import { openPopup, closePopup } from './utils.js';
-import { enableValidation } from './validate.js';
+import { enableValidation, enableButton, disableButton } from './validate.js';
 import { editProfile, updateAvatar, cleanErrors } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
@@ -15,9 +15,7 @@ const avatarUpdateContainer = document.querySelector('.profile__avatar-container
 
 editButton.addEventListener('click', function() {
   cleanErrors(popupProfile);
-  const buttonElement = popupProfile.querySelector('.popup__button');
-  buttonElement.classList.remove('popup__button_disabled');
-  buttonElement.disabled = false;
+  enableButton(popupProfile);
   nameInput.value = profileName.textContent;
   jobInput.value = profileProfession.textContent;
   openPopup(popupProfile);
@@ -49,9 +47,7 @@ formElementCard.addEventListener('submit', addCard);
 
 avatarUpdateContainer.addEventListener('click', function() {
   cleanErrors(popupUpdateAvatar);
-  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
-  buttonElement.classList.add('popup__button_disabled');
-  buttonElement.disabled = true;
+  disableButton(popupUpdateAvatar);
   popupAvatarLinkInput.value = '';
   openPopup(popupUpdateAvatar);
 });
@@ -89,6 +85,4 @@ getInitialCards()
 .catch(err => {
   console.log('Ошибка при загрузке карточек', err.message);
 })
-
-
 
