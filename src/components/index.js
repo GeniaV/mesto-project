@@ -2,12 +2,12 @@
 import '../pages/index.css';
 import { openPopup, closePopup } from './utils.js';
 import { enableValidation, enableButton, disableButton } from './validate.js';
-import { editProfile, updateAvatar, cleanErrors } from './modal.js';
+import { cleanErrors } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
-         avatar, placesGallery } from './constants.js';
-import { addCard, createCard } from './card.js';
-import { getProfileInfoFromServer, getInitialCards } from './api.js';
+         avatar, placesGallery, cardTemplate } from './constants.js';
+import { createCard } from './card.js';
+import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto } from './api.js';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
@@ -85,4 +85,71 @@ getInitialCards()
 .catch(err => {
   console.log('Ошибка при загрузке карточек', err.message);
 })
+
+// Добавление карточек пользователем
+export function addCard (evt) {
+  const buttonElement = popupNewCards.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
+  evt.preventDefault();
+  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
+  const likeCounter = cardElement.querySelector('.card__likes-counter');
+  addNewCards({
+    name: placeInput.value,
+    link: linkInput.value,
+    likes: likeCounter.textContent
+  })
+  .then(res => {
+    placesGallery.prepend(createCard(res));
+    closePopup(popupNewCards);
+  })
+  .catch(err => {
+    console.log('Ошибка добавления карточки на сервер', err.message);
+  })
+  .finally(() => {
+    buttonElement.textContent = 'Создать';
+  })
+
+  disableButton(popupNewCards);
+}
+
+//Редактирование профиля
+export function editProfile(evt) {
+  evt.preventDefault();
+  const buttonElement = formElement.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
+  updateProfile({
+    name: nameInput.value,
+    about: jobInput.value
+  })
+  .then(res => {
+    profileName.textContent = nameInput.value;
+    profileProfession.textContent = jobInput.value;
+    closePopup(popupProfile);
+  })
+  .catch(err => {
+    console.log('Ошибка редактирования профиля', err.message);
+  })
+  .finally(() => {
+    buttonElement.textContent = 'Сохранить';
+  })
+}
+
+export function updateAvatar(evt) {
+  evt.preventDefault();
+  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
+  updateProfilePhoto({
+    avatar: popupAvatarLinkInput.value
+  })
+  .then(res => {
+    avatar.src = popupAvatarLinkInput.value;
+    closePopup(popupUpdateAvatar);
+  })
+  .catch(err => {
+    console.log('Ошибка редактирования фото профиля', err.message);
+  })
+  .finally(() => {
+    buttonElement.textContent = 'Сохранить';
+  })
+}
 

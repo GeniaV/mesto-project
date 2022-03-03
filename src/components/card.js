@@ -1,7 +1,6 @@
-import { openPopup, closePopup } from './utils.js';
-import { addNewCards, addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
-import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage, placesGallery, placeInput,
-  linkInput, popupNewCards } from './constants.js';
+import { openPopup } from './utils.js';
+import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
+import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage } from './constants.js';
 
 export function deleteCard(evt) {
   evt.target.closest('.card').remove();
@@ -80,33 +79,6 @@ export function createCard(res) {
   });
 
   return cardElement;
-}
-
-// Добавление карточек пользователем
-export function addCard (evt) {
-  const buttonElement = popupNewCards.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
-  evt.preventDefault();
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
-  const likeCounter = cardElement.querySelector('.card__likes-counter');
-  addNewCards({
-    name: placeInput.value,
-    link: linkInput.value,
-    likes: likeCounter.textContent
-  })
-  .then(res => {
-    placesGallery.prepend(createCard(res));
-    closePopup(popupNewCards);
-  })
-  .catch(err => {
-    console.log('Ошибка добавления карточки на сервер', err.message);
-  })
-  .finally(() => {
-    buttonElement.textContent = 'Создать';
-  })
-
-  buttonElement.classList.add('popup__button_disabled');
-  buttonElement.disabled = true;
 }
 
 
