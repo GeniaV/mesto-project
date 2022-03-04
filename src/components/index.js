@@ -1,22 +1,31 @@
+//Импорты
+import '../pages/index.css';
+import { openPopup, closePopup } from './utils.js';
+import { enableValidation, enableButton, disableButton } from './validate.js';
+import { cleanErrors } from './modal.js';
+import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
+         formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
+         avatar, placesGallery, cardTemplate } from './constants.js';
+import { createCard } from './card.js';
+import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto } from './api.js';
+
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const avatarUpdateContainer = document.querySelector('.profile__avatar-container');
 
 editButton.addEventListener('click', function() {
-  openPopup(popupProfile);
   cleanErrors(popupProfile);
+  enableButton(popupProfile);
   nameInput.value = profileName.textContent;
   jobInput.value = profileProfession.textContent;
-  const buttonElement = popupProfile.querySelector('.popup__button');
-  buttonElement.classList.remove('popup__button_disabled');
-  buttonElement.disabled = false;
+  openPopup(popupProfile);
 });
 
 addButton.addEventListener('click', function() {
-  openPopup(popupNewCards);
   cleanErrors(popupNewCards)
   placeInput.value = '';
   linkInput.value = '';
+  openPopup(popupNewCards);
 });
 
 const popups = document.querySelectorAll('.popup')
@@ -37,12 +46,10 @@ formElement.addEventListener('submit', editProfile);
 formElementCard.addEventListener('submit', addCard);
 
 avatarUpdateContainer.addEventListener('click', function() {
-  openPopup(popupUpdateAvatar);
-  popupAvatarLinkInput.value = '';
   cleanErrors(popupUpdateAvatar);
-  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
-  buttonElement.classList.add('popup__button_disabled');
-  buttonElement.disabled = true;
+  disableButton(popupUpdateAvatar);
+  popupAvatarLinkInput.value = '';
+  openPopup(popupUpdateAvatar);
 });
 
 formElementAvatar.addEventListener('submit', updateAvatar);
@@ -56,42 +63,93 @@ enableValidation({
   errorClass: 'popup__input-error_active'
 });
 
-//Импорты
-import '../pages/index.css';
-import { openPopup } from './utils.js';
-import { closePopup } from './utils.js';
-import { showInputError } from './validate.js';
-import { hideInputError } from './validate.js';
-import { isValid } from './validate.js';
-import { hasInvalidInput } from './validate.js';
-import { toggleButtonState } from './validate.js';
-import { setEventListeners } from './validate.js';
-import { enableValidation } from './validate.js';
-import { formElement } from './modal.js';
-import { profileName } from './modal.js';
-import { nameInput } from './modal.js';
-import { profileProfession } from './modal.js';
-import { jobInput } from './modal.js';
-import { popupProfile } from './modal.js';
-import { popupImage } from './modal.js';
-import { editProfile } from './modal.js';
-import { popupUpdateAvatar } from './modal.js';
-import { formElementAvatar } from './modal.js';
-import { popupAvatarLinkInput } from './modal.js';
-import { avatar } from './modal.js';
-import { updateAvatar } from './modal.js';
-import { closePopupByPressEsc } from './modal.js';
-import { showPhoto } from './modal.js';
-import { popupPhoto } from './card.js';
-import { cardTemplate } from './card.js';
-import { popupPhotoCaption } from './card.js';
-import { initialCards } from './card.js';
-import { deleteCard } from './card.js';
-import { createCard } from './card.js';
-import { formElementCard } from './card.js';
-import { placesGallery } from './card.js';
-import { placeInput } from './card.js';
-import { linkInput } from './card.js';
-import { popupNewCards } from './card.js';
-import { addCard } from './card.js';
-import { cleanErrors } from './modal.js';
+//Получение аватара с сервера
+getProfileInfoFromServer()
+  .then(data => {
+    avatar.src = data.avatar;
+    profileName.textContent = data.name;
+    profileProfession.textContent = data.about;
+  })
+  .catch(err => {
+    console.log('Ошибка при загрузке аватара', err.message);
+  })
+
+// Получение карточек с сервера
+getInitialCards()
+.then(data => {
+  const newCard = data.map((item) => {
+    return createCard(item);
+  })
+  placesGallery.prepend(...newCard);
+})
+.catch(err => {
+  console.log('Ошибка при загрузке карточек', err.message);
+})
+
+// Добавление карточек пользователем
+export function addCard (evt) {
+  const buttonElement = popupNewCards.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
+  evt.preventDefault();
+  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
+  const likeCounter = cardElement.querySelector('.card__likes-counter');
+  addNewCards({
+    name: placeInput.value,
+    link: linkInput.value,
+    likes: likeCounter.textContent
+  })
+  .then(res => {
+    placesGallery.prepend(createCard(res));
+    closePopup(popupNewCards);
+  })
+  .catch(err => {
+    console.log('Ошибка добавления карточки на сервер', err.message);
+  })
+  .finally(() => {
+    buttonElement.textContent = 'Создать';
+  })
+
+  disableButton(popupNewCards);
+}
+
+//Редактирование профиля
+export function editProfile(evt) {
+  evt.preventDefault();
+  const buttonElement = formElement.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
+  updateProfile({
+    name: nameInput.value,
+    about: jobInput.value
+  })
+  .then(res => {
+    profileName.textContent = nameInput.value;
+    profileProfession.textContent = jobInput.value;
+    closePopup(popupProfile);
+  })
+  .catch(err => {
+    console.log('Ошибка редактирования профиля', err.message);
+  })
+  .finally(() => {
+    buttonElement.textContent = 'Сохранить';
+  })
+}
+
+export function updateAvatar(evt) {
+  evt.preventDefault();
+  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
+  buttonElement.textContent = 'Сохранение...';
+  updateProfilePhoto({
+    avatar: popupAvatarLinkInput.value
+  })
+  .then(res => {
+    avatar.src = popupAvatarLinkInput.value;
+    closePopup(popupUpdateAvatar);
+  })
+  .catch(err => {
+    console.log('Ошибка редактирования фото профиля', err.message);
+  })
+  .finally(() => {
+    buttonElement.textContent = 'Сохранить';
+  })
+}
+

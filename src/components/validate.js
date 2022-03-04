@@ -64,8 +64,15 @@ export const enableValidation = ({formSelector, ...rest}) => {
   });
 };
 
+export function enableButton(popup) {
+  const buttonElement = popup.querySelector('.popup__button');
+  buttonElement.classList.remove('popup__button_disabled');
+  buttonElement.disabled = false;
+}
 
-
-
-
+export function disableButton(popup) {
+  const buttonElement = popup.querySelector('.popup__button');
+  buttonElement.classList.add('popup__button_disabled');
+  buttonElement.disabled = true;
+}
 

@@ -1,15 +1,7 @@
 import { openPopup } from './utils.js';
-import { closePopup } from './utils.js';
-import { addNewCards } from './api.js';
-import { addLike } from './api.js';
-import { deleteLike } from './api.js';
-import { getProfileInfoFromServer } from './api.js';
-import { deleteСardfromServer } from './api.js';
-
-export const popupPhoto = document.querySelector('.popup__photo-large');
-export const cardTemplate = document.querySelector('#card-template').content; // Обратились к содержимому
-export const popupPhotoCaption = document.querySelector('.popup__photo-caption');
-const popupImage = document.querySelector('.popup_type_image');
+import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
+import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage } from './constants.js';
+import { showPhoto } from './modal.js';
 
 export function deleteCard(evt) {
   evt.target.closest('.card').remove();
@@ -68,15 +60,11 @@ export function createCard(res) {
      }
   }
 
-  // Функция показа фотографии карточки в попапе
-  function showPhoto () {
-    openPopup(popupImage);
-    popupPhoto.src = cardImage.src;
-    popupPhoto.alt= cardImage.alt;
-    popupPhotoCaption.textContent = cardName.textContent;
+  function showPhotoInPopup () {
+    showPhoto(res);
   }
 
-  cardImage.addEventListener('click', showPhoto);
+  cardImage.addEventListener('click', showPhotoInPopup);
   likeButton.addEventListener('click', likeCard);
   deleteButton.addEventListener('click', (evt) => {
     deleteСardfromServer(res._id)
@@ -90,51 +78,3 @@ export function createCard(res) {
 
   return cardElement;
 }
-
-export const formElementCard = document.querySelector('.popup__form_type_new-card');
-export const placesGallery = document.querySelector('.places-gallery');
-export const placeInput = formElementCard.querySelector('#place-name')
-export const linkInput = formElementCard.querySelector('#place-link');
-export const popupNewCards = document.querySelector('.popup_type_new-card');
-
-// Добавление карточек пользователем
-export function addCard (evt) {
-  const buttonElement = popupNewCards.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
-  evt.preventDefault();
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
-  const likeCounter = cardElement.querySelector('.card__likes-counter');
-  addNewCards({
-    name: placeInput.value,
-    link: linkInput.value,
-    likes: likeCounter.textContent
-  })
-  .then(res => {
-    placesGallery.prepend(createCard(res));
-  })
-  .catch(err => {
-    console.log('Ошибка добавления карточки на сервер', err.message);
-  })
-  .finally(() => {
-    buttonElement.textContent = 'Создать';
-  })
-  closePopup(popupNewCards);
-
-  buttonElement.classList.add('popup__button_disabled');
-  buttonElement.disabled = true;
-}
-
-// Получение карточек с сервера
-import { getInitialCards } from './api.js';
-getInitialCards()
-.then(data => {
-  const newCard = data.map((item) => {
-    return createCard(item);
-  })
-  placesGallery.prepend(...newCard);
-})
-.catch(err => {
-  console.log('Ошибка при загрузке карточек', err.message);
-})
-
-
