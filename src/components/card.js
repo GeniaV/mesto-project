@@ -1,6 +1,7 @@
 import { openPopup } from './utils.js';
 import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
 import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage } from './constants.js';
+import { showPhoto } from './modal.js';
 
 export function deleteCard(evt) {
   evt.target.closest('.card').remove();
@@ -59,14 +60,11 @@ export function createCard(res) {
      }
   }
 
-  function showPhoto () {
-    openPopup(popupImage);
-    popupPhoto.src = cardImage.src;
-    popupPhoto.alt= cardImage.alt;
-    popupPhotoCaption.textContent = cardName.textContent;
+  function showPhotoInPopup () {
+    showPhoto(res);
   }
 
-  cardImage.addEventListener('click', showPhoto);
+  cardImage.addEventListener('click', showPhotoInPopup);
   likeButton.addEventListener('click', likeCard);
   deleteButton.addEventListener('click', (evt) => {
     deleteСardfromServer(res._id)
@@ -80,5 +78,3 @@ export function createCard(res) {
 
   return cardElement;
 }
-
-

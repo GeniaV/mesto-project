@@ -1,11 +1,11 @@
 import { openPopup, closePopup } from './utils.js';
 import { popupImage, popupPhoto, popupPhotoCaption } from './constants.js';
 
-export function showPhoto () {
+export function showPhoto (res) {
   openPopup(popupImage);
-  popupPhoto.src = cardImage.src;
-  popupPhoto.alt = cardImage.alt;
-  popupPhotoCaption.textContent = cardName.textContent;
+  popupPhoto.src = res.link;
+  popupPhoto.alt = res.name;
+  popupPhotoCaption.textContent = res.name;
 }
 
 export function closePopupByPressEsc(evt) {
