@@ -1,6 +1,7 @@
 import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
 import { cardTemplate } from './constants.js';
 import { showPhoto } from './modal.js';
+import { user } from './index.js';
 
 export function deleteCard(cardElement) {
   cardElement.remove();
@@ -20,21 +21,14 @@ export function createCard(res) {
   cardImage.src = res.link;
   likeCounter.textContent = res.likes.length;
 
-  getProfileInfoFromServer()
-  .then(data => {
-    const userId = data._id;
-    res.likes.forEach((item) => {
-      if(item._id === userId) {
-        likeButton.classList.add('card__like-icon_like');
-      }
-    })
-    if(res.owner._id !== userId) {
-      deleteButton.style.display = 'none';
+  res.likes.forEach((item) => {
+    if(item._id === user.id) {
+      likeButton.classList.add('card__like-icon_like');
     }
   })
-  .catch(err => {
-    console.log('Ошибка', err.message);
-  })
+  if(res.owner._id !== user.id) {
+    deleteButton.style.display = 'none';
+  }
 
   function likeCard() {
     let length = Number(likeCounter.textContent);

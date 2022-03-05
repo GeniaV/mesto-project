@@ -5,13 +5,14 @@ import { openPopup, closePopup } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
          avatar, placesGallery, cardTemplate } from './constants.js';
-import { createCard } from './card.js';
-import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto } from './api.js';
+import { createCard, deleteCard } from './card.js';
+import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto, deleteСardfromServer } from './api.js';
 import { renderLoading } from './utils.js';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const avatarUpdateContainer = document.querySelector('.profile__avatar-container');
+export const user = {};
 
 editButton.addEventListener('click', function() {
   cleanErrors(popupProfile);
@@ -69,6 +70,7 @@ getProfileInfoFromServer()
     avatar.src = data.avatar;
     profileName.textContent = data.name;
     profileProfession.textContent = data.about;
+    user.id = data._id;
   })
   .catch(err => {
     console.log('Ошибка при загрузке аватара', err.message);
@@ -146,5 +148,3 @@ export function updateAvatar(evt) {
     renderLoading(popupUpdateAvatar, false);
   })
 }
-
-
