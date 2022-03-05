@@ -90,12 +90,9 @@ getInitialCards()
 export function addCard (evt) {
   evt.preventDefault();
   renderLoading(popupNewCards, true);
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
-  const likeCounter = cardElement.querySelector('.card__likes-counter');
   addNewCards({
     name: placeInput.value,
     link: linkInput.value,
-    likes: likeCounter.textContent
   })
   .then(res => {
     placesGallery.prepend(createCard(res));
