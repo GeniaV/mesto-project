@@ -1,13 +1,13 @@
 //Импорты
 import '../pages/index.css';
-import { openPopup, closePopup } from './utils.js';
-import { enableValidation, enableButton, disableButton } from './validate.js';
-import { cleanErrors } from './modal.js';
+import { enableValidation, enableButton, disableButton, cleanErrors } from './validate.js';
+import { openPopup, closePopup } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
          avatar, placesGallery, cardTemplate } from './constants.js';
 import { createCard } from './card.js';
 import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto } from './api.js';
+import { renderLoading } from './utils.js';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
@@ -88,9 +88,8 @@ getInitialCards()
 
 // Добавление карточек пользователем
 export function addCard (evt) {
-  const buttonElement = popupNewCards.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
   evt.preventDefault();
+  renderLoading(popupNewCards, true);
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const likeCounter = cardElement.querySelector('.card__likes-counter');
   addNewCards({
@@ -106,7 +105,7 @@ export function addCard (evt) {
     console.log('Ошибка добавления карточки на сервер', err.message);
   })
   .finally(() => {
-    buttonElement.textContent = 'Создать';
+    renderLoading(popupNewCards, false)
   })
 
   disableButton(popupNewCards);
@@ -115,8 +114,7 @@ export function addCard (evt) {
 //Редактирование профиля
 export function editProfile(evt) {
   evt.preventDefault();
-  const buttonElement = formElement.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
+  renderLoading(formElement, true);
   updateProfile({
     name: nameInput.value,
     about: jobInput.value
@@ -130,14 +128,13 @@ export function editProfile(evt) {
     console.log('Ошибка редактирования профиля', err.message);
   })
   .finally(() => {
-    buttonElement.textContent = 'Сохранить';
+    renderLoading(formElement, false);
   })
 }
 
 export function updateAvatar(evt) {
   evt.preventDefault();
-  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
+  renderLoading(popupUpdateAvatar, true);
   updateProfilePhoto({
     avatar: popupAvatarLinkInput.value
   })
@@ -149,7 +146,8 @@ export function updateAvatar(evt) {
     console.log('Ошибка редактирования фото профиля', err.message);
   })
   .finally(() => {
-    buttonElement.textContent = 'Сохранить';
+    renderLoading(popupUpdateAvatar, false);
   })
 }
+
 

@@ -1,13 +1,9 @@
-import { closePopupByPressEsc } from './modal.js';
-
-// Функция открытия попапа
-export function openPopup(popupElement) {
-  document.addEventListener('keydown', closePopupByPressEsc);
-  popupElement.classList.add('popup_opened');
-}
-// Функция закрытия попапа
-export function closePopup(popupElement) {
-  document.removeEventListener('keydown', closePopupByPressEsc);
-  popupElement.classList.remove('popup_opened');
+export function renderLoading(popup, isLoading) {
+  const buttonElement = popup.querySelector('.popup__button');
+  if(isLoading) {
+    buttonElement.textContent = 'Сохранение...';
+  } else {
+    buttonElement.textContent = buttonElement.value;
+  }
 }
 

@@ -76,3 +76,13 @@ export function disableButton(popup) {
   buttonElement.disabled = true;
 }
 
+export function cleanErrors(popupElement) {
+  const input = popupElement.querySelectorAll('.popup__input-style');
+  const errorText = popupElement.querySelectorAll('.popup__input-error');
+  input.forEach(input => {
+    input.classList.remove('popup__input-style_type_error');
+  });
+  errorText.forEach(errorText => {
+    errorText.classList.remove('popup__input-error_active');
+  });
+}

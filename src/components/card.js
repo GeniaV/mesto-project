@@ -1,10 +1,10 @@
-import { openPopup } from './utils.js';
 import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
-import { popupPhoto, cardTemplate, popupPhotoCaption, popupImage } from './constants.js';
+import { cardTemplate } from './constants.js';
 import { showPhoto } from './modal.js';
 
-export function deleteCard(evt) {
-  evt.target.closest('.card').remove();
+export function deleteCard(cardElement) {
+  cardElement.remove();
+  cardElement = null;
 }
 
 export function createCard(res) {
@@ -26,7 +26,6 @@ export function createCard(res) {
     res.likes.forEach((item) => {
       if(item._id === userId) {
         likeButton.classList.add('card__like-icon_like');
-        likeCounter.textContent + 1;
       }
     })
     if(res.owner._id !== userId) {
@@ -69,7 +68,7 @@ export function createCard(res) {
   deleteButton.addEventListener('click', (evt) => {
     deleteСardfromServer(res._id)
     .then((res) => {
-      deleteCard(evt);
+      deleteCard(cardElement);
     })
     .catch(err => {
       console.log('Ошибка удаления карточки', err.message);

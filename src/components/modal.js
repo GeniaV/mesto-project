@@ -1,11 +1,10 @@
-import { openPopup, closePopup } from './utils.js';
 import { popupImage, popupPhoto, popupPhotoCaption } from './constants.js';
 
 export function showPhoto (res) {
-  openPopup(popupImage);
   popupPhoto.src = res.link;
   popupPhoto.alt = res.name;
   popupPhotoCaption.textContent = res.name;
+  openPopup(popupImage);
 }
 
 export function closePopupByPressEsc(evt) {
@@ -15,13 +14,13 @@ export function closePopupByPressEsc(evt) {
   }
 }
 
-export function cleanErrors(popupElement) {
-  const input = popupElement.querySelectorAll('.popup__input-style');
-  const errorText = popupElement.querySelectorAll('.popup__input-error');
-  input.forEach(input => {
-    input.classList.remove('popup__input-style_type_error');
-  });
-  errorText.forEach(errorText => {
-    errorText.classList.remove('popup__input-error_active');
-  });
+// Функция открытия попапа
+export function openPopup(popupElement) {
+  document.addEventListener('keydown', closePopupByPressEsc);
+  popupElement.classList.add('popup_opened');
+}
+// Функция закрытия попапа
+export function closePopup(popupElement) {
+  document.removeEventListener('keydown', closePopupByPressEsc);
+  popupElement.classList.remove('popup_opened');
 }
