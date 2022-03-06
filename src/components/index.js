@@ -1,6 +1,6 @@
 //Импорты
 import '../pages/index.css';
-import { enableValidation, enableButton, disableButton, cleanErrors } from './validate.js';
+import { enableValidation, enableButton, disableButton, cleanErrors, validationConfig } from './validate.js';
 import { openPopup, closePopup } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
@@ -15,15 +15,15 @@ const avatarUpdateContainer = document.querySelector('.profile__avatar-container
 export const user = {};
 
 editButton.addEventListener('click', function() {
-  cleanErrors(popupProfile);
-  enableButton(popupProfile);
+  cleanErrors(popupProfile, validationConfig);
+  enableButton(popupProfile, validationConfig);
   nameInput.value = profileName.textContent;
   jobInput.value = profileProfession.textContent;
   openPopup(popupProfile);
 });
 
 addButton.addEventListener('click', function() {
-  cleanErrors(popupNewCards)
+  cleanErrors(popupNewCards, validationConfig);
   placeInput.value = '';
   linkInput.value = '';
   openPopup(popupNewCards);
@@ -47,22 +47,15 @@ formElement.addEventListener('submit', editProfile);
 formElementCard.addEventListener('submit', addCard);
 
 avatarUpdateContainer.addEventListener('click', function() {
-  cleanErrors(popupUpdateAvatar);
-  disableButton(popupUpdateAvatar);
+  cleanErrors(popupUpdateAvatar, validationConfig);
+  disableButton(popupUpdateAvatar, validationConfig);
   popupAvatarLinkInput.value = '';
   openPopup(popupUpdateAvatar);
 });
 
 formElementAvatar.addEventListener('submit', updateAvatar);
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input-style',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input-style_type_error',
-  errorClass: 'popup__input-error_active'
-});
+enableValidation(validationConfig)
 
 //Получение аватара с сервера
 getProfileInfoFromServer()
@@ -106,7 +99,7 @@ export function addCard (evt) {
   .finally(() => {
     renderLoading(popupNewCards, false)
   })
-  disableButton(popupNewCards);
+  disableButton(popupNewCards, validationConfig);
 }
 
 //Редактирование профиля

@@ -1,4 +1,4 @@
-import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
+import { addLike, deleteLike } from './api.js';
 import { cardTemplate } from './constants.js';
 import { showPhoto } from './modal.js';
 import { user, removeCard } from './index.js';
