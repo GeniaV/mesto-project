@@ -1,14 +1,14 @@
 import { addLike, deleteLike, getProfileInfoFromServer, deleteСardfromServer } from './api.js';
 import { cardTemplate } from './constants.js';
 import { showPhoto } from './modal.js';
-import { user } from './index.js';
+import { user, removeCard } from './index.js';
 
 export function deleteCard(cardElement) {
   cardElement.remove();
   cardElement = null;
 }
 
-export function createCard(res) {
+export function createCard(res, cardId, removeCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const deleteButton = cardElement.querySelector('.card__delete-icon'); // Объявили кнопку удаления (иконка корзина)
   const likeButton = cardElement.querySelector('.card__like-icon'); // Объявили кнопку лайк
@@ -59,14 +59,8 @@ export function createCard(res) {
 
   cardImage.addEventListener('click', showPhotoInPopup);
   likeButton.addEventListener('click', likeCard);
-  deleteButton.addEventListener('click', (evt) => {
-    deleteСardfromServer(res._id)
-    .then((res) => {
-      deleteCard(cardElement);
-    })
-    .catch(err => {
-      console.log('Ошибка удаления карточки', err.message);
-    })
+  deleteButton.addEventListener('click', () => {
+    removeCard(res._id, cardElement)
   });
 
   return cardElement;

@@ -80,7 +80,7 @@ getProfileInfoFromServer()
 getInitialCards()
 .then(data => {
   const newCard = data.map((item) => {
-    return createCard(item);
+    return createCard(item, item.owner_id, removeCard);
   })
   placesGallery.prepend(...newCard);
 })
@@ -97,7 +97,7 @@ export function addCard (evt) {
     link: linkInput.value,
   })
   .then(res => {
-    placesGallery.prepend(createCard(res));
+    placesGallery.prepend(createCard(res, res.owner_id, removeCard));
     closePopup(popupNewCards);
   })
   .catch(err => {
@@ -106,7 +106,6 @@ export function addCard (evt) {
   .finally(() => {
     renderLoading(popupNewCards, false)
   })
-
   disableButton(popupNewCards);
 }
 
@@ -146,5 +145,15 @@ export function updateAvatar(evt) {
   })
   .finally(() => {
     renderLoading(popupUpdateAvatar, false);
+  })
+}
+
+export function removeCard(cardId, cardElement) {
+  deleteСardfromServer(cardId)
+  .then((res) => {
+    deleteCard(cardElement)
+  })
+  .catch(err => {
+    console.log('Ошибка удаления карточки', err.message);
   })
 }

@@ -86,3 +86,4 @@ export function cleanErrors(popupElement) {
     errorText.classList.remove('popup__input-error_active');
   });
 }
+
