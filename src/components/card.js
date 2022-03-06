@@ -8,6 +8,9 @@ export function deleteCard(cardElement) {
   cardElement = null;
 }
 
+
+
+
 export function createCard(res, cardId, removeCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const deleteButton = cardElement.querySelector('.card__delete-icon'); // Объявили кнопку удаления (иконка корзина)
@@ -26,6 +29,7 @@ export function createCard(res, cardId, removeCard) {
       likeButton.classList.add('card__like-icon_like');
     }
   })
+
   if(res.owner._id !== user.id) {
     deleteButton.style.display = 'none';
   }
@@ -53,11 +57,9 @@ export function createCard(res, cardId, removeCard) {
      }
   }
 
-  function showPhotoInPopup () {
+  cardImage.addEventListener('click', () => {
     showPhoto(res);
-  }
-
-  cardImage.addEventListener('click', showPhotoInPopup);
+  });
   likeButton.addEventListener('click', likeCard);
   deleteButton.addEventListener('click', () => {
     removeCard(res._id, cardElement)
