@@ -1,12 +1,11 @@
-//Импорты
 import '../pages/index.css';
 import { enableValidation, enableButton, disableButton, cleanErrors, validationConfig } from './validate.js';
 import { openPopup, closePopup } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
-         avatar, placesGallery, cardTemplate } from './constants.js';
-import { createCard, deleteCard } from './card.js';
-import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto, deleteСardfromServer } from './api.js';
+         avatar, placesGallery } from './constants.js';
+import { createCard, deleteCard, likeCard } from './card.js';
+import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto, deleteСardfromServer, addLike, deleteLike } from './api.js';
 import { renderLoading } from './utils.js';
 
 const editButton = document.querySelector('.profile__edit-button');
@@ -73,7 +72,7 @@ getProfileInfoFromServer()
 getInitialCards()
 .then(data => {
   const newCard = data.map((item) => {
-    return createCard(item, item.owner_id, removeCard);
+    return createCard(item, item.owner_id, handlerLikeClick, removeCard);
   })
   placesGallery.prepend(...newCard);
 })
@@ -90,7 +89,7 @@ export function addCard (evt) {
     link: linkInput.value,
   })
   .then(res => {
-    placesGallery.prepend(createCard(res, res.owner_id, removeCard));
+    placesGallery.prepend(createCard(res, res.owner_id, handlerLikeClick, removeCard));
     closePopup(popupNewCards);
   })
   .catch(err => {
@@ -149,4 +148,25 @@ export function removeCard(cardId, cardElement) {
   .catch(err => {
     console.log('Ошибка удаления карточки', err.message);
   })
+}
+
+export function handlerLikeClick(cardId, cardElement) {
+  const likeButton = cardElement.querySelector('.card__like-icon');
+  if(!likeButton.classList.contains('card__like-icon_like')) {
+     addLike(cardId)
+    .then(res => {
+      likeCard(cardElement, res._id, res.likes);
+    })
+    .catch(err => {
+      console.log('Ошибка проствления лайка', err.message);
+    })
+  } else {
+    deleteLike(cardId)
+    .then(res => {
+      likeCard(cardElement, res._id, res.likes);
+    })
+    .catch(err => {
+      console.log('Ошибка удаления лайка', err.message);
+    })
+  }
 }

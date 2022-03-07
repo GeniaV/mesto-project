@@ -1,17 +1,25 @@
-import { addLike, deleteLike } from './api.js';
 import { cardTemplate } from './constants.js';
 import { showPhoto } from './modal.js';
-import { user, removeCard } from './index.js';
+import { user } from './index.js';
 
 export function deleteCard(cardElement) {
   cardElement.remove();
   cardElement = null;
 }
 
+export function likeCard(cardElement, user, likes) {
+  const likeButton = cardElement.querySelector('.card__like-icon');
+  const likeCounter = cardElement.querySelector('.card__likes-counter');
+  if(!(likeButton.classList.contains('card__like-icon_like'))) {
+    likeButton.classList.add('card__like-icon_like');
+    likeCounter.textContent = likes.length;
+  } else {
+    likeButton.classList.remove('card__like-icon_like');
+    likeCounter.textContent = likes.length;
+  }
+}
 
-
-
-export function createCard(res, cardId, removeCard) {
+export function createCard(res, cardId, handlerLikeClick, removeCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const deleteButton = cardElement.querySelector('.card__delete-icon'); // Объявили кнопку удаления (иконка корзина)
   const likeButton = cardElement.querySelector('.card__like-icon'); // Объявили кнопку лайк
@@ -34,35 +42,14 @@ export function createCard(res, cardId, removeCard) {
     deleteButton.style.display = 'none';
   }
 
-  function likeCard() {
-    let length = Number(likeCounter.textContent);
-    if(!(likeButton.classList.contains('card__like-icon_like'))) {
-      addLike (res._id)
-      .then(res => {
-        likeButton.classList.add('card__like-icon_like');
-        likeCounter.textContent = length + 1;
-      })
-      .catch(err => {
-        console.log('Ошибка проствления лайка', err.message);
-      })
-     } else {
-      deleteLike (res._id)
-      .then(res => {
-        likeButton.classList.remove('card__like-icon_like');
-        likeCounter.textContent = length - 1;
-      })
-      .catch(err => {
-        console.log('Ошибка удаления лайка', err.message);
-      })
-     }
-  }
-
   cardImage.addEventListener('click', () => {
     showPhoto(res);
   });
-  likeButton.addEventListener('click', likeCard);
+  likeButton.addEventListener('click', () => {
+    handlerLikeClick(res._id, cardElement);
+  });
   deleteButton.addEventListener('click', () => {
-    removeCard(res._id, cardElement)
+    removeCard(res._id, cardElement);
   });
 
   return cardElement;
