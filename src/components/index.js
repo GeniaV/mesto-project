@@ -1,28 +1,28 @@
-//Импорты
 import '../pages/index.css';
-import { openPopup, closePopup } from './utils.js';
-import { enableValidation, enableButton, disableButton } from './validate.js';
-import { cleanErrors } from './modal.js';
+import { enableValidation, enableButton, disableButton, cleanErrors, validationConfig } from './validate.js';
+import { openPopup, closePopup } from './modal.js';
 import { formElement, profileName, nameInput, profileProfession, jobInput, popupProfile, popupUpdateAvatar,
          formElementAvatar, popupAvatarLinkInput, formElementCard, placeInput, linkInput, popupNewCards,
-         avatar, placesGallery, cardTemplate } from './constants.js';
-import { createCard } from './card.js';
-import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto } from './api.js';
+         avatar, placesGallery } from './constants.js';
+import { createCard, deleteCard, likeCard } from './card.js';
+import { getProfileInfoFromServer, getInitialCards, addNewCards, updateProfile, updateProfilePhoto, deleteСardfromServer, addLike, deleteLike } from './api.js';
+import { renderLoading } from './utils.js';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 const avatarUpdateContainer = document.querySelector('.profile__avatar-container');
+export const user = {};
 
 editButton.addEventListener('click', function() {
-  cleanErrors(popupProfile);
-  enableButton(popupProfile);
+  cleanErrors(popupProfile, validationConfig);
+  enableButton(popupProfile, validationConfig);
   nameInput.value = profileName.textContent;
   jobInput.value = profileProfession.textContent;
   openPopup(popupProfile);
 });
 
 addButton.addEventListener('click', function() {
-  cleanErrors(popupNewCards)
+  cleanErrors(popupNewCards, validationConfig);
   placeInput.value = '';
   linkInput.value = '';
   openPopup(popupNewCards);
@@ -46,22 +46,15 @@ formElement.addEventListener('submit', editProfile);
 formElementCard.addEventListener('submit', addCard);
 
 avatarUpdateContainer.addEventListener('click', function() {
-  cleanErrors(popupUpdateAvatar);
-  disableButton(popupUpdateAvatar);
+  cleanErrors(popupUpdateAvatar, validationConfig);
+  disableButton(popupUpdateAvatar, validationConfig);
   popupAvatarLinkInput.value = '';
   openPopup(popupUpdateAvatar);
 });
 
 formElementAvatar.addEventListener('submit', updateAvatar);
 
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input-style',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input-style_type_error',
-  errorClass: 'popup__input-error_active'
-});
+enableValidation(validationConfig)
 
 //Получение аватара с сервера
 getProfileInfoFromServer()
@@ -69,6 +62,7 @@ getProfileInfoFromServer()
     avatar.src = data.avatar;
     profileName.textContent = data.name;
     profileProfession.textContent = data.about;
+    user.id = data._id;
   })
   .catch(err => {
     console.log('Ошибка при загрузке аватара', err.message);
@@ -78,7 +72,7 @@ getProfileInfoFromServer()
 getInitialCards()
 .then(data => {
   const newCard = data.map((item) => {
-    return createCard(item);
+    return createCard(item, item.owner_id, handlerLikeClick, removeCard);
   })
   placesGallery.prepend(...newCard);
 })
@@ -88,35 +82,29 @@ getInitialCards()
 
 // Добавление карточек пользователем
 export function addCard (evt) {
-  const buttonElement = popupNewCards.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
   evt.preventDefault();
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
-  const likeCounter = cardElement.querySelector('.card__likes-counter');
+  renderLoading(popupNewCards, true);
   addNewCards({
     name: placeInput.value,
     link: linkInput.value,
-    likes: likeCounter.textContent
   })
   .then(res => {
-    placesGallery.prepend(createCard(res));
+    placesGallery.prepend(createCard(res, res.owner_id, handlerLikeClick, removeCard));
     closePopup(popupNewCards);
   })
   .catch(err => {
     console.log('Ошибка добавления карточки на сервер', err.message);
   })
   .finally(() => {
-    buttonElement.textContent = 'Создать';
+    renderLoading(popupNewCards, false)
   })
-
-  disableButton(popupNewCards);
+  disableButton(popupNewCards, validationConfig);
 }
 
 //Редактирование профиля
 export function editProfile(evt) {
   evt.preventDefault();
-  const buttonElement = formElement.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
+  renderLoading(formElement, true);
   updateProfile({
     name: nameInput.value,
     about: jobInput.value
@@ -130,14 +118,13 @@ export function editProfile(evt) {
     console.log('Ошибка редактирования профиля', err.message);
   })
   .finally(() => {
-    buttonElement.textContent = 'Сохранить';
+    renderLoading(formElement, false);
   })
 }
 
 export function updateAvatar(evt) {
   evt.preventDefault();
-  const buttonElement = popupUpdateAvatar.querySelector('.popup__button');
-  buttonElement.textContent = 'Сохранение...';
+  renderLoading(popupUpdateAvatar, true);
   updateProfilePhoto({
     avatar: popupAvatarLinkInput.value
   })
@@ -149,7 +136,37 @@ export function updateAvatar(evt) {
     console.log('Ошибка редактирования фото профиля', err.message);
   })
   .finally(() => {
-    buttonElement.textContent = 'Сохранить';
+    renderLoading(popupUpdateAvatar, false);
   })
 }
 
+export function removeCard(cardId, cardElement) {
+  deleteСardfromServer(cardId)
+  .then((res) => {
+    deleteCard(cardElement)
+  })
+  .catch(err => {
+    console.log('Ошибка удаления карточки', err.message);
+  })
+}
+
+export function handlerLikeClick(cardId, cardElement) {
+  const likeButton = cardElement.querySelector('.card__like-icon');
+  if(!likeButton.classList.contains('card__like-icon_like')) {
+     addLike(cardId)
+    .then(res => {
+      likeCard(cardElement, res._id, res.likes);
+    })
+    .catch(err => {
+      console.log('Ошибка проствления лайка', err.message);
+    })
+  } else {
+    deleteLike(cardId)
+    .then(res => {
+      likeCard(cardElement, res._id, res.likes);
+    })
+    .catch(err => {
+      console.log('Ошибка удаления лайка', err.message);
+    })
+  }
+}
