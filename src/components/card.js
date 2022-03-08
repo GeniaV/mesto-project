@@ -1,13 +1,12 @@
 import { cardTemplate } from './constants.js';
 import { showPhoto } from './modal.js';
-import { user } from './index.js';
 
 export function deleteCard(cardElement) {
   cardElement.remove();
   cardElement = null;
 }
 
-export function likeCard(cardElement, user, likes) {
+export function likeCard(cardElement, likes) {
   const likeButton = cardElement.querySelector('.card__like-icon');
   const likeCounter = cardElement.querySelector('.card__likes-counter');
   if(!(likeButton.classList.contains('card__like-icon_like'))) {
@@ -19,7 +18,7 @@ export function likeCard(cardElement, user, likes) {
   }
 }
 
-export function createCard(res, cardId, handlerLikeClick, removeCard) {
+export function createCard(res, userId, handlerLikeClick, removeCard) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true); // Клонируем содержимое шаблона
   const deleteButton = cardElement.querySelector('.card__delete-icon'); // Объявили кнопку удаления (иконка корзина)
   const likeButton = cardElement.querySelector('.card__like-icon'); // Объявили кнопку лайк
@@ -33,12 +32,12 @@ export function createCard(res, cardId, handlerLikeClick, removeCard) {
   likeCounter.textContent = res.likes.length;
 
   res.likes.forEach((item) => {
-    if(item._id === user.id) {
+    if(item._id === userId) {
       likeButton.classList.add('card__like-icon_like');
     }
   })
 
-  if(res.owner._id !== user.id) {
+  if(res.owner._id !== userId) {
     deleteButton.style.display = 'none';
   }
 

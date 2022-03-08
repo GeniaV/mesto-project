@@ -56,30 +56,6 @@ formElementAvatar.addEventListener('submit', updateAvatar);
 
 enableValidation(validationConfig)
 
-//Получение аватара с сервера
-getProfileInfoFromServer()
-  .then(data => {
-    avatar.src = data.avatar;
-    profileName.textContent = data.name;
-    profileProfession.textContent = data.about;
-    user.id = data._id;
-  })
-  .catch(err => {
-    console.log('Ошибка при загрузке аватара', err.message);
-  })
-
-// Получение карточек с сервера
-getInitialCards()
-.then(data => {
-  const newCard = data.map((item) => {
-    return createCard(item, item.owner_id, handlerLikeClick, removeCard);
-  })
-  placesGallery.prepend(...newCard);
-})
-.catch(err => {
-  console.log('Ошибка при загрузке карточек', err.message);
-})
-
 // Добавление карточек пользователем
 export function addCard (evt) {
   evt.preventDefault();
@@ -89,7 +65,7 @@ export function addCard (evt) {
     link: linkInput.value,
   })
   .then(res => {
-    placesGallery.prepend(createCard(res, res.owner_id, handlerLikeClick, removeCard));
+    placesGallery.prepend(createCard(res, user.id, handlerLikeClick, removeCard));
     closePopup(popupNewCards);
   })
   .catch(err => {
@@ -155,7 +131,7 @@ export function handlerLikeClick(cardId, cardElement) {
   if(!likeButton.classList.contains('card__like-icon_like')) {
      addLike(cardId)
     .then(res => {
-      likeCard(cardElement, res._id, res.likes);
+      likeCard(cardElement, res.likes);
     })
     .catch(err => {
       console.log('Ошибка проствления лайка', err.message);
@@ -163,10 +139,26 @@ export function handlerLikeClick(cardId, cardElement) {
   } else {
     deleteLike(cardId)
     .then(res => {
-      likeCard(cardElement, res._id, res.likes);
+      likeCard(cardElement, res.likes);
     })
     .catch(err => {
       console.log('Ошибка удаления лайка', err.message);
     })
   }
 }
+
+//Получение данных пользователя, а затем получение карточек
+Promise.all([getProfileInfoFromServer(), getInitialCards()])
+.then(res => {
+  avatar.src = res[0].avatar;
+  profileName.textContent = res[0].name;
+  profileProfession.textContent = res[0].about;
+  user.id = res[0]._id;
+  const newCard = res[1].map((item) => {
+    return createCard(item, user.id, handlerLikeClick, removeCard);
+  })
+  placesGallery.prepend(...newCard);
+})
+.catch(err => {
+  console.log('Ошибка добавления пользователя и карточек ', err.message);
+})
